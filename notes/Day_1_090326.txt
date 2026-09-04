@@ -1,0 +1,45 @@
+  UW PICO 5.09                           New Buffer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                 [ File "daily_objectives.txt" is a directory ]
+^G Get Help  ^O WriteOut  ^R Read File ^Y Prev Pg   ^K Cut Text  ^C Cur Pos
+^X Exit      ^J Justify   ^W Where is  ^V Next Pg   ^U UnCut Text^T To Spell
+  UW PICO 5.09               File: daily_objectives.txt               Modified
+
+Here's today's plan from py-mentor:
+
+Objective: Get a small real sample of transaction data flowing CVS-> MySQL -> SELECT. Nothing else, no dections logic, no UI.
+
+Two decisions locked in to save time:
+- Dataset: PaySim (Kaggle, one flat CSV: type, amount, orig/dest accounts, bala$
+- DB access: raw SQL via pymysql, not an ORM — writing CREATE TABLE/INSERT your$
+
+Steps (60 min):
+1. (5m) Confirm scope + env check — Python, MySQL running, pymysql installed, C$
+2. (5m) Peek at CSV, pick a small sample (~2–5k rows)
+3. (5m) Design a minimal flat table schema (no normalization/indexes yet)
+4. (10m) Connect via pymysql, run CREATE DATABASE/CREATE TABLE by hand
+5. (15m) Script: read sample, INSERT via parameterized queries
+6. (5m) Checkpoint: query it back (COUNT(*), LIMIT 5)
+7. (5m) Wrap-up — park list for next session (normalization, ORM revisit, full $
+
+

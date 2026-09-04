@@ -1,0 +1,64 @@
+SAR PROJECT — LESSONS LEARNED
+==============================
+Running log of mistakes worth remembering, most recent last.
+
+
+[2026-09-03] Trailing comma in CREATE TABLE
+--------------------------------------------
+What happened:
+  Wrote a CREATE TABLE statement where the last column definition had a
+  trailing comma before the closing parenthesis:
+
+      isFlaggesFraud TINYINT(1),
+  );
+
+Why it broke:
+  MySQL does not allow a trailing comma after the last column definition
+  (unlike Python lists/dicts or JS objects/arrays, which do allow it).
+  The comma tells the parser to expect another column definition, so
+  hitting ")" right after produces a syntax error.
+
+Lesson:
+  In SQL DDL (CREATE TABLE, etc.), the comma is a SEPARATOR between items,
+  not a terminator after each item. Double-check the last item in any
+  comma-separated list has no trailing comma.
+
+
+[2026-09-03] Misspelled column name (isFlaggesFraud vs isFlaggedFraud)
+------------------------------------------------------------------------
+What happened:
+  Typo'd a column name as "isFlaggesFraud" instead of "isFlaggedFraud".
+
+Why it's dangerous even though it's NOT a syntax error:
+  MySQL happily creates a column with whatever name you give it — a typo
+  in an identifier doesn't fail at CREATE TABLE time. The failure shows up
+  later, when other code (e.g. an insert script mapping CSV columns to
+  table columns) expects the name to match the source data and it doesn't.
+
+Lesson:
+  Typos in identifiers (column/table names) are silent bugs that surface
+  downstream, not immediately. Worth a careful visual diff against the
+  source column names before running DDL, since the DB won't catch it
+  for you.
+
+
+[2026-09-03] Missing keyword — cursor.execute("sar_project") instead of "USE sar_project"
+--------------------------------------------------------------------------------------------
+What happened:
+  Wrote cursor.execute("sar_project") when the intent was to run
+  "USE sar_project". The keyword USE was dropped entirely, so pymysql
+  sent the bare string "sar_project" to MySQL as a full SQL statement.
+
+Why it broke:
+  "sar_project" on its own isn't a valid SQL command, so the parser fails
+  immediately on the first token. This produced:
+    "You have an error in your SQL syntax ... near 'sar_project' at line 1"
+  The "at line 1" is because each cursor.execute() call is judged as its
+  own standalone statement/string.
+
+Lesson:
+  When a MySQL syntax error names the exact identifier you passed in
+  (not a symbol like a comma or quote), check whether the whole command
+  keyword got left out, not just whether the identifier itself is wrong.
+  A syntax error pointing at a name doesn't always mean the name is
+  malformed — it can mean nothing valid came before it.
