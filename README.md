@@ -34,9 +34,9 @@ SAR_project/
 1. Install and start MySQL (developed against XAMPP's bundled MySQL/MariaDB).
 2. Download [PaySim](https://www.kaggle.com/datasets/ealaxi/paysim1) and place it at `text_files/paysim.csv`.
 3. Run the one-time schema setup:
-       python3 create_schema.py
+       `python3 create_schema.py`
 4. Load a sample of transactions:
-       python3 sar_main.py
+       `python3 sar_main.py`
 
 ## Key design decisions
 
