@@ -15,6 +15,7 @@ A Python + MySQL simulation of an AML transaction-monitoring and Suspicious Acti
 ## Project structure
 
 SAR_project/
+SAR_project/
 ├── create_schema.py       # one-time setup
 ├── sar_main.py             # entry point
 ├── classes/
@@ -23,7 +24,7 @@ SAR_project/
 │   └── load_functions.py   # CSV loading logic
 ├── test_cases/             # tests (planned)
 ├── text_files/
-│   └── paysim.csv           # source dataset (gitignored, its too large)
+│   └── paysim.csv           # source dataset (gitignored)
 ├── docs/                    # Pydoc output (planned)
 └── notes/                   # session notes, lessons learned
 
