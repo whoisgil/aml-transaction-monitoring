@@ -7,45 +7,44 @@ A Python + MySQL simulation of an AML transaction-monitoring and Suspicious Acti
 ## Architecture
 
 - Python 3, MySQL (developed against XAMPP)
-- DB access via r
+- DB access via raw SQL / `pymysql`
 - Data source: PaySim (Kaggle synthetic transactions dataset)
-- First detection spikes
+- First detection typology: velocity/volume spikes
 - Analyst interface: Flask/Streamlit (planned)
 
 ## Project structure
 
-    SAR_project/
-    ├── create_sc setup: creates the database + transactions table
-    ├── sar_main.point: loads atransaction sample into the database
-    ├── classes/
-    │   └── db_connect.py          # DB_Connect — a small pymysql wrapper c
-    ├── functions/
-    │   └── load_-database loadinglogic
-    ├── test_caseests (planned)
-    ├── text_files/
-    │   └── paysie dataset(gitignored)
-    ├── docs/    -generateddocumentation (planned)
-    └── notes/   on notes andlessons-learned log
+SAR_project/
+├── create_schema.py       # one-time setup
+├── sar_main.py             # entry point
+├── classes/
+│   └── db_connect.py       # pymysql wrapper class
+├── functions/
+│   └── load_functions.py   # CSV loading logic
+├── test_cases/             # tests (planned)
+├── text_files/
+│   └── paysim.csv           # source dataset (gitignored, its too large)
+├── docs/                    # Pydoc output (planned)
+└── notes/                   # session notes, lessons learned
 
 ## Setup
 
-1. Install and start MySQL (developed against XAMPP's bundled
-MySQL/MariaDB).
-2. Download
-[PaySim](https://laxi/paysim1) andplace it at `text_files/paysim.csv`.
-3. Run the one-ti
+1. Install and start MySQL (developed against XAMPP's bundled MySQL/MariaDB).
+2. Download [PaySim](https://www.kaggle.com/datasets/ealaxi/paysim1) and place it at `text_files/paysim.csv`.
+3. Run the one-time schema setup:
        python3 create_schema.py
-4. Load a sample
+4. Load a sample of transactions:
        python3 sar_main.py
 
 ## Key design decisions
 
 - `DECIMAL`, not `FLOAT`, for money columns
-- Parameterized q, not stringconcatenation
-- No `IF NOT EXISE TABLE`
+- Parameterized queries (`%s` placeholders), not string concatenation
+- No `IF NOT EXISTS` on the schema's `CREATE TABLE`
 - Raw SQL, not an ORM
 
 ## Roadmap
+
 - [x] Database schema and transactions table
 - [x] CSV data ingestion pipeline (5,000-row sample)
 - [ ] Velocity/volume-spike detection logic

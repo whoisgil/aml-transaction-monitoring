@@ -1,7 +1,11 @@
 # Python
 __pycache__/
-*.__pyc 
+*.pyc
 .venv/
 
-#macOS
+# macOS
 .DS_Store
+
+# Source dataset — too large for GitHub (limit is 100MB)
+# get it from https://www.kaggle.com/datasets/ealaxi/paysim1
+text_files/paysim.csv
