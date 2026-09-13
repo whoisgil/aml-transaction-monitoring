@@ -1,0 +1,18 @@
+SAR PROJECT — OBJECTIVES LIST
+==============================
+Updated 2026-09-06.
+
+Current state: the flat transactions schema and a 5,000-row PaySim sample
+loader are implemented. Detection, alert persistence, case management,
+analyst review, full-dataset loading, and automated tests remain.
+
+| Day | 1-hour target              | End-of-session result |
+| --- | -------------------------- | --------------------- |
+| 2   | Data and rule readiness    | Make the development dataset reproducible and suitable for detection; prevent or explicitly handle duplicate loads; preserve monetary values without float conversion; validate row counts; and define Rule #1's monitored account direction, time window, thresholds, and evidence. Use fixtures or a representative sample containing repeated accounts. |
+| 3   | Detection Rule #1 + tests  | Implement one velocity/volume typology that returns a structured result containing the account/entity, matching transaction IDs, rule code, reason, threshold, and observed values. Add unit tests for matching, non-matching, and boundary cases. PaySim fraud labels are used only for evaluation, not as rule inputs. |
+| 4   | Alert persistence          | Add an ALERT table and persist Rule #1 results with status, timestamps, rule/version information, and supporting evidence. Prevent the same detection run from creating duplicate alerts and add an integration test. |
+| 5   | Case and analyst workflow  | Add CASE and case-to-alert relationships. Support grouping related alerts and recording case status, analyst notes, disposition, and timestamps while keeping the final SAR decision human-controlled. |
+| 6   | Investigation interface    | Choose Flask or Streamlit and build a case-first review queue and detail view showing grouped alerts, involved accounts, related transactions, rule evidence, and persisted analyst actions. |
+| 7   | Additional rules           | Add 2–3 typologies through the same detection/alert interface. Give each rule focused tests and evaluate its results against the PaySim labels to tune thresholds and document false-positive limitations. |
+| 8   | Scale and harden           | Stream/batch the full dataset rather than loading it all into memory; add indexes based on detection and investigation queries; move configuration out of source code; and add rollback/error handling and performance checks. |
+| 9   | End-to-end validation      | Demonstrate fresh setup -> ingestion -> detection -> alerts -> cases -> analyst disposition. Complete automated tests, dependency/setup instructions, README architecture/status updates, screenshots, and known limitations. |

@@ -3,6 +3,7 @@
 # importing needed libraries
 import csv
 import itertools
+from decimal import Decimal
 
 
 def loadSampleTransactions(passed_db, passed_csv_path, passed_sample_size):
@@ -17,13 +18,13 @@ def loadSampleTransactions(passed_db, passed_csv_path, passed_sample_size):
             rows_to_insert.append((
                 int(row["step"]),
                 row["type"],
-                float(row["amount"]),
+                Decimal(row["amount"]),
                 row["nameOrig"],
-                float(row["oldbalanceOrg"]),
-                float(row["newbalanceOrig"]),
+                Decimal(row["oldbalanceOrg"]),
+                Decimal(row["newbalanceOrig"]),
                 row["nameDest"],
-                float(row["oldbalanceDest"]),
-                float(row["newbalanceDest"]),
+                Decimal(row["oldbalanceDest"]),
+                Decimal(row["newbalanceDest"]),
                 int(row["isFraud"]),
                 int(row["isFlaggedFraud"]),
             ))

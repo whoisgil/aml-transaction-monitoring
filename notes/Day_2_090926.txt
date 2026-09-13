@@ -1,0 +1,4 @@
+Rule #1 direction: nameDest (receiving account), not nameOrig.
+Reason: sampled 5,000 rows every nameOrig is unique (0 repeats),
+287 nameDest accounts repeat (up to 46x). Velocity rule needs repeats
+on the monitored side to ever fire.
