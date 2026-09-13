@@ -1,0 +1,28 @@
+RULE-001-VELOCITY implemented in functions/detection_functions.py.
+
+fetchTransactionsForVelocityRule(passed_db): SELECT id, step, type, amount,
+nameDest FROM transactions ORDER BY step. No window filtering in SQL —
+window logic lives entirely in detectVelocityRule (Option A from Day 2:
+each rule owns its query, no shared fetch/trim layer yet).
+
+detectVelocityRule(passed_transactions, passed_as_of_step=None): groups
+nameDest accounts within a rolling 24-step window (inclusive — a
+transaction exactly 24 steps back still counts), flags accounts with
+>= 10 incoming transactions. Returns structured results per the Day 2
+evidence spec: matched_account, matching_tx_ids, rule_code, reason,
+threshold, observed_value.
+
+Tests: test_cases/test_velocity_rule.py (pytest style) and
+test_cases/test_velocity_rule_unittest.py (unittest.TestCase style),
+same 5 cases each — matching, non-matching, boundary-in, boundary-out,
+and a direction guard confirming nameDest-side activity is what's
+counted. 9/9 passing.
+
+Bug caught during review: accounts.setdefault(...) was indented one
+level too shallow, so it ran once after the loop instead of once per
+row — every account's observed_value came out as 1 regardless of real
+count. Fixed; all tests pass after the fix.
+
+Day 3 objective (objectives_list.txt row 3) complete. isFraud/
+isFlaggedFraud were not read anywhere in the rule logic — reserved for
+evaluating results later, per the objective's requirement.
