@@ -2,14 +2,14 @@
 
 A Python + MySQL simulation of an AML transaction-monitoring and Suspicious Activity Report (SAR) workflow, using synthetic financial data. The system flags suspicious transaction patterns, generates alerts, and organizes them into cases for analyst review; the final SAR decision remains with a human analyst.
 
-**Status:** Schema and data ingestion pipeline complete. Detection logic and analyst UI in progress.
+**Status:** Schema, data ingestion, and the first detection rule (RULE-001-VELOCITY) complete. Alert persistence, case management, and the analyst UI are in progress.
 
 ## Architecture
 
 - Python 3, MySQL (developed against XAMPP)
 - DB access via raw SQL / `pymysql`
 - Data source: PaySim (Kaggle synthetic transactions dataset)
-- First detection typology: velocity/volume spikes
+- First detection typology implemented: velocity/volume spikes (RULE-001-VELOCITY)
 - Analyst interface: Flask/Streamlit (planned)
 
 ## Project structure
@@ -21,8 +21,9 @@ SAR_project/
 ├── classes/
 │   └── db_connect.py         # DB_Connect — a small pymysql wrapper class
 ├── functions/
-│   └── load_functions.py     # CSV-to-database loading logic
-├── test_cases/               # unit tests (planned)
+│   ├── load_functions.py     # CSV-to-database loading logic
+│   └── detection_functions.py # RULE-001-VELOCITY detection logic
+├── test_cases/               # unit tests for detection logic
 ├── text_files/
 │   └── paysim.csv            # source dataset (gitignored — see .gitignore)
 ├── docs/                     # Pydoc-generated documentation (planned)
@@ -49,8 +50,8 @@ SAR_project/
 
 - [x] Database schema and transactions table
 - [x] CSV data ingestion pipeline (5,000-row sample)
-- [ ] Velocity/volume-spike detection logic
+- [x] Velocity/volume-spike detection logic (RULE-001-VELOCITY)
 - [ ] Alert generation and case grouping
 - [ ] Flask/Streamlit analyst review UI
 - [ ] Full dataset ingestion (currently a 5,000-row sample)
-- [ ] Test coverage for detection logic
+- [x] Test coverage for detection logic
