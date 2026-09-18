@@ -1,5 +1,6 @@
 # velocity detection rule
 RULE_CODE = "RULE-001-VELOCITY"
+RULE_VERSION = "1.0"
 WINDOW_STEPS = 24
 THRESHOLD = 10
 
