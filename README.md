@@ -55,3 +55,15 @@ SAR_project/
 - [ ] Flask/Streamlit analyst review UI
 - [ ] Full dataset ingestion (currently a 5,000-row sample)
 - [x] Test coverage for detection logic
+
+## Session 4 — Alert persistence
+
+- Added an `alerts` table with status, timestamps, rule/version information,
+  the matched account, and supporting rule evidence.
+- Added database-enforced duplicate prevention for retries of the same logical
+  detection run.
+- Added `run_detection.py` to execute RULE-001-VELOCITY and persist its results.
+- Stored matching transaction IDs as JSON so the evidence remains structured.
+- Added a real MySQL integration test covering persistence, database defaults,
+  evidence, timestamps, duplicate prevention, and cleanup.
+- Full automated test suite: 10 tests passing.
