@@ -38,6 +38,26 @@ def main():
     );
     """)
 
+    # The unique key makes retries of the same logical detection run idempotent.
+    cursor.execute("""CREATE TABLE alerts (
+        id                INT AUTO_INCREMENT PRIMARY KEY,
+        rule_code         VARCHAR(30) NOT NULL,
+        rule_version      VARCHAR(10) NOT NULL,
+        as_of_step        INT NOT NULL,
+        matched_account   VARCHAR(20) NOT NULL,
+        matching_tx_ids   TEXT NOT NULL,
+        reason            TEXT NOT NULL,
+        threshold         INT NOT NULL,
+        observed_value    INT NOT NULL,
+        status            VARCHAR(20) NOT NULL DEFAULT 'OPEN',
+        created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                            ON UPDATE CURRENT_TIMESTAMP,
+        CONSTRAINT uq_alert_run_account
+            UNIQUE (rule_code, rule_version, as_of_step, matched_account)
+    );
+    """)
+
     # saving the schema and closing the connection cleanly
     connection.commit()
     cursor.close()
