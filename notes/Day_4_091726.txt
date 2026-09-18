@@ -1,0 +1,18 @@
+RULE-001-VELOCITY alert persistence implemented.
+
+Added the alerts table with status, created/updated timestamps, rule code
+and version, detection step, matched account, and supporting evidence.
+Matching transaction IDs are stored as JSON.
+
+Duplicate alerts are prevented by a database unique key across rule code,
+rule version, detection step, and matched account. Retrying the same logical
+run uses a no-op duplicate update and returns the number actually inserted.
+
+Added run_detection.py to fetch transactions, run Rule #1, and persist its
+results. Empty transaction tables are handled without calling max().
+
+Replaced the fake persistence test with a real MySQL integration test that
+checks insertion, duplicate prevention, evidence, defaults, timestamps, and
+cleanup. Full suite: 10 tests passing.
+
+Day 4 objective complete. Next up: Day 5 — case and analyst workflow.
