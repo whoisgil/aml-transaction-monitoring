@@ -19,7 +19,7 @@ class DB_Connect():
                         port=3306,
                         user=self.passed_db_username,
                         password=self.passed_db_password,
-                        db=self.passed_database,
+                        database=self.passed_database,
                         charset='utf8mb4',
                         cursorclass=pymysql.cursors.DictCursor)
 
@@ -41,7 +41,7 @@ class DB_Connect():
             self.__connect()
 
         with self.conn.cursor() as cursor:
-            cursor.executemany(passed_query, passed_values)
+            return cursor.executemany(passed_query, passed_values)
 
     def executeSelectQuery(self, passed_query, passed_values=None):
         """Executes a SELECT database query and returns the results as a tuple-like structure"""
