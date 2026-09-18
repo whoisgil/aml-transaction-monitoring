@@ -62,3 +62,21 @@ Lesson:
   keyword got left out, not just whether the identifier itself is wrong.
   A syntax error pointing at a name doesn't always mean the name is
   malformed — it can mean nothing valid came before it.
+
+
+[2026-09-17] A schema creation script does not migrate an existing database
+----------------------------------------------------------------------------
+What happened:
+  Added the alerts table to create_schema.py, then ran the script against the
+  existing development database. The script stopped when CREATE TABLE
+  transactions found that the transactions table already existed, so it never
+  reached the new alerts statement.
+
+Why it happened:
+  create_schema.py describes a fresh database setup. Changing that file does
+  not apply the new definition to tables and databases that already exist.
+
+Lesson:
+  Treat fresh schema creation and changes to a live schema as separate tasks.
+  Inspect the current database first, then apply only the required CREATE or
+  ALTER statement. Do not add IF NOT EXISTS merely to hide schema differences.
