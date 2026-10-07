@@ -29,10 +29,9 @@ class DB_Connect():
         if not self.conn:
             self.__connect()
 
-        # passed_values stays optional so this also covers plain DDL statements
-        # that take no parameters, like CREATE TABLE
         with self.conn.cursor() as cursor:
-            cursor.execute(passed_query, passed_values)
+            return cursor.execute(passed_query, passed_values)
+
 
     def executeManyQuery(self, passed_query, passed_values):
         """Executes the same Insert query once for every row in a batch"""

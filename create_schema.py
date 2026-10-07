@@ -58,6 +58,51 @@ def main():
     );
     """)
 
+    cursor.execute("""CREATE TABLE cases (
+    id                    INT AUTO_INCREMENT PRIMARY KEY,
+    matched_account       VARCHAR(20) NOT NULL,
+    status                VARCHAR(20) NOT NULL DEFAULT 'OPEN',
+    disposition           VARCHAR(20),
+    disposition_by        VARCHAR(100),
+    opened_at             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                              ON UPDATE CURRENT_TIMESTAMP,
+    closed_at             TIMESTAMP NULL,
+    active_case_account   VARCHAR(20)
+        GENERATED ALWAYS AS (
+            CASE
+                WHEN status != 'CLOSED' THEN matched_account
+                ELSE NULL
+            END
+        ) STORED,
+    CONSTRAINT uq_active_case_account UNIQUE (active_case_account)
+    );
+    """)
+
+    cursor.execute("""CREATE TABLE case_alerts (
+        case_id       INT NOT NULL,
+        alert_id      INT NOT NULL,
+        linked_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (case_id, alert_id),
+        CONSTRAINT uq_case_alert UNIQUE (alert_id),
+        CONSTRAINT fk_case_alert_case
+            FOREIGN KEY (case_id) REFERENCES cases(id),
+        CONSTRAINT fk_case_alert_alert
+            FOREIGN KEY (alert_id) REFERENCES alerts(id)
+    );
+    """)
+
+    cursor.execute("""CREATE TABLE case_notes (
+        id            INT AUTO_INCREMENT PRIMARY KEY,
+        case_id       INT NOT NULL,
+        analyst       VARCHAR(100) NOT NULL,
+        note          TEXT NOT NULL,
+        created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT fk_case_note_case
+            FOREIGN KEY (case_id) REFERENCES cases(id)
+    );
+    """)
+
     # saving the schema and closing the connection cleanly
     connection.commit()
     cursor.close()
