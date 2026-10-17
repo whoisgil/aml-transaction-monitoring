@@ -1,10 +1,13 @@
 SAR PROJECT — OBJECTIVES LIST
 ==============================
-Updated 2026-09-06.
+Updated 2026-10-17.
 
-Current state: the flat transactions schema and a 5,000-row PaySim sample
-loader are implemented. Detection, alert persistence, case management,
-analyst review, full-dataset loading, and automated tests remain.
+Current state: Days 2–6 are complete. The project has reproducible sample
+ingestion, RULE-001-VELOCITY, alert persistence, transactional case grouping,
+analyst workflow, a Streamlit investigation interface, and 34 automated tests.
+The current focus is Day 7: additional detection rules and PaySim-label
+evaluation. Full-dataset loading and production hardening remain planned for
+Days 8–9.
 
 | Day | 1-hour target              | End-of-session result |
 | --- | -------------------------- | --------------------- |

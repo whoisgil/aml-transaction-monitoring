@@ -50,10 +50,11 @@ class DB_Connect():
 
         with self.conn.cursor() as cursor:
             cursor.execute(passed_query, passed_values)
-
-        return cursor.fetchall()
+            return cursor.fetchall()
 
     def close_connection(self):
-        """Closes the database connection"""
+        """Closes the database connection if one is opened"""
 
-        self.conn.close()
+        if self.conn:
+            self.conn.close()
+            self.conn = None

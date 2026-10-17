@@ -266,15 +266,28 @@ def test_valid_status_moves_case_into_review():
             db,
             case_id,
             "IN_REVIEW",
+            TEST_ANALYST,
         )
 
         case = db.executeSelectQuery(
             "SELECT status FROM cases WHERE id = %s",
             (case_id,),
         )[0]
+        notes = db.executeSelectQuery(
+            """
+                SELECT analyst, note
+                FROM case_notes
+                WHERE case_id = %s
+            """,
+            (case_id,),
+        )
 
         assert status_changed is True
         assert case["status"] == "IN_REVIEW"
+        assert notes == [{
+            "analyst": TEST_ANALYST,
+            "note": "Changed case status to IN_REVIEW.",
+        }]
     finally:
         if db.conn:
             cleanupTestData(db)

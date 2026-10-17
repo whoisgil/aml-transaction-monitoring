@@ -5,7 +5,7 @@ from functions.detection_functions import (
     fetchTransactionsForVelocityRule, detectVelocityRule, RULE_VERSION
 )
 from functions.alert_functions import persistAlerts
-
+from functions.case_functions import groupAlertsIntoCases
 
 db_username = "root"
 db_password = ""
@@ -33,7 +33,12 @@ def main():
     else:
         print(f"Persisted {inserted_count} alert(s) for step {as_of_step}.")
 
+    # Grouping runs even when alerts already existed so an interrupted run can finish.
+    linked_count = groupAlertsIntoCases(sar_db)
+    print(f"Linked {linked_count} alert(s) to cases.")
+
     sar_db.close_connection()
+
 
 
 # calling main only when this file is run directly so Pydoc can import it safely

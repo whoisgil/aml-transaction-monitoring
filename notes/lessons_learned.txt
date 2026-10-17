@@ -80,3 +80,21 @@ Lesson:
   Treat fresh schema creation and changes to a live schema as separate tasks.
   Inspect the current database first, then apply only the required CREATE or
   ALTER statement. Do not add IF NOT EXISTS merely to hide schema differences.
+
+
+[2026-10-17] Test value longer than its VARCHAR column
+-------------------------------------------------------
+What happened:
+  A new integration test used "TEST-INVESTIGATION-ACCOUNT" as its test
+  account. Every test that inserted an alert failed with:
+    "Data too long for column 'matched_account' at row 1"
+
+Why it broke:
+  matched_account is VARCHAR(20) and the value was 26 characters. MySQL's
+  strict mode rejects the insert rather than truncating it, and nothing on
+  the Python side checks string length first.
+
+Lesson:
+  Test identifiers must fit the same column limits as real data. Check
+  their length against create_schema.py. A failure in test setup also
+  means the code under test never ran.
