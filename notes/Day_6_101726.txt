@@ -1,0 +1,31 @@
+Investigation interface implemented.
+
+Chose Streamlit and added a case-first analyst review interface in sar_app.py.
+The queue shows active cases by default, can include closed cases, and summarizes
+each case's matched account, status, alert count, and peak observed rule value.
+
+The case detail view shows grouped alerts, decoded rule evidence, involved
+sending and receiving accounts, evidence transactions, and analyst-note history.
+Closed cases remain available for review without exposing controls that could
+change the final decision.
+
+Added analyst actions for moving an OPEN case to IN_REVIEW, saving named notes,
+and recording a confirmed SAR_FILED or NO_SAR disposition. Status transitions
+record the analyst as an audit note, and the status update and audit note commit
+together or roll back together.
+
+Added investigation query helpers for the case queue, case records, alerts,
+transactions, and notes. JSON transaction evidence is decoded before reaching
+the interface, and overlapping evidence transaction IDs are deduplicated.
+
+Updated run_detection.py to group open alerts after persistence. Grouping also
+runs when alerts already exist so an interrupted workflow can be resumed.
+
+Added requirements.txt with pinned PyMySQL, pytest, and Streamlit versions.
+Expanded unit and MySQL integration coverage for queue counts, case lookup,
+evidence decoding, evidence-transaction ordering and deduplication, closed-case
+filtering, analyst history, status attribution, and safe connection cleanup.
+The automated suite now contains 34 tests.
+
+Day 6 objective complete. Next up: Day 7 — additional detection rules and
+PaySim-label evaluation.
