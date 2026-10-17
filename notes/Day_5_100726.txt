@@ -1,0 +1,22 @@
+Case and analyst workflow implemented.
+
+Added cases, case_alerts, and case_notes with workflow statuses, timestamps,
+analyst notes, and final dispositions. Alerts for the same matched account
+share one active case, while later activity can open a new case after the
+earlier case is closed.
+
+Alert assignment is transactional: the case, case-to-alert link, and CASED
+alert status are committed together. A failed attempt rolls back without
+leaving a partial case or link. Duplicate alert links are prevented by the
+database.
+
+Analyst notes require a named analyst and cannot be added after closure.
+Closing requires recordDisposition, which records SAR_FILED or NO_SAR and
+prevents the original analyst decision from being overwritten. The final SAR
+decision remains human-controlled.
+
+Added unit and MySQL integration coverage for grouping, status changes, notes,
+case closure, duplicate links, and disposition protection. Full suite: 24
+tests passing.
+
+Day 5 objective complete. Next up: Day 6 — investigation interface.

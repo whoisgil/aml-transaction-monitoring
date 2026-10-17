@@ -67,3 +67,17 @@ SAR_project/
 - Added a real MySQL integration test covering persistence, database defaults,
   evidence, timestamps, duplicate prevention, and cleanup.
 - Full automated test suite: 10 tests passing.
+
+## Session 5 — Case and analyst workflow
+
+- Added `cases`, `case_alerts`, and `case_notes` for grouping related alerts
+  and preserving analyst review history.
+- Added OPEN, IN_REVIEW, and CLOSED case statuses with named analyst notes,
+  timestamps, and SAR_FILED or NO_SAR dispositions.
+- Made case creation, alert linking, and the CASED alert status transactional
+  so failed grouping attempts do not leave partial workflow data.
+- Prevented duplicate alert links, notes after case closure, and changes to a
+  recorded disposition.
+- Kept the final SAR decision human-controlled rather than assigning it through
+  detection logic.
+- Full automated test suite: 24 tests passing.

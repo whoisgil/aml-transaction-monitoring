@@ -26,3 +26,24 @@ is fully done. Full detail lives in `notes/Day_3_091226.txt`:
    guard already built in `sar_main.py` for transactions.
 4. Add an integration test covering the persistence + duplicate-prevention
    path.
+
+# Day 5 — complete. Next up: Day 6.
+
+Day 5 objective (`objectives_list.txt`, row "5 | Case and analyst workflow")
+is fully done. Full detail lives in `notes/Day_5_100726.txt`:
+
+- Added `cases`, `case_alerts`, and `case_notes` for grouping alerts and
+  preserving analyst review history.
+- Alerts for the same matched account share one active case. Alert assignment
+  and the CASED status commit together so failed attempts do not leave partial
+  workflow data.
+- Added OPEN, IN_REVIEW, and CLOSED case statuses, named analyst notes, and
+  SAR_FILED or NO_SAR dispositions.
+- Closed cases reject later notes and preserve the original disposition.
+- Full automated test suite: 24 tests passing.
+
+## Next session — Day 6 (`objectives_list.txt` row 6): Investigation interface
+
+Choose Flask or Streamlit and build a case-first review queue and detail view
+showing grouped alerts, involved accounts, related transactions, rule evidence,
+and persisted analyst actions.
