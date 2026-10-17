@@ -123,59 +123,46 @@ def addCaseNote(passed_db, passed_case_id, passed_analyst, passed_note):
 
 
 def updateCaseStatus(
-        passed_db,
-        passed_case_id,
-        passed_status,
+        passed_db, 
+        passed_case_id, 
+        passed_status, 
         passed_analyst):
-    """Moves an active case to a review status and records the analyst action."""
+    """Moves an active case to a review status."""
+
+    if not passed_analyst or not passed_analyst.strip():
+        raise ValueError("A status change must name the analyst")
 
     if passed_status not in CASE_STATUSES:
         raise ValueError(f"Unknown case status: {passed_status}")
 
     # Closing requires recordDisposition so every closed case has an analyst decision.
+    
     if passed_status == "CLOSED":
         raise ValueError("Use recordDisposition to close a case")
 
-    if not passed_analyst or not passed_analyst.strip():
-        raise ValueError("A status change must name the analyst")
-
-    try:
-        updated_count = passed_db.executeQuery(
-            """
-                UPDATE cases
-                SET status = %s
-                WHERE id = %s
-                    AND status != 'CLOSED'
-                    AND status != %s
-            """,
-            (passed_status, passed_case_id, passed_status),
-        )
-
-        if updated_count != 1:
-            passed_db.conn.rollback()
-            return False
-
-        note_count = passed_db.executeQuery(
-            """
-                INSERT INTO case_notes (case_id, analyst, note)
-                VALUES (%s, %s, %s)
-            """,
-            (
-                passed_case_id,
-                passed_analyst.strip(),
-                f"Changed case status to {passed_status}.",
-            ),
-        )
-
-        if note_count != 1:
-            raise RuntimeError("Case status action could not be recorded")
-
-        passed_db.conn.commit()
-    except Exception:
-        passed_db.conn.rollback()
-        raise
-
-    return True
+    updated_count = passed_db.executeQuery(
+        """
+            UPDATE cases
+            SET status = %s
+            WHERE id = %s
+                AND status != 'CLOSED'
+                AND status != %s
+        """,
+        (passed_status, passed_case_id, passed_status),
+    )
+    inserted_count = passed_db.executeQuery(
+    """
+        INSERT INTO case_notes (case_id, analyst, note)
+        VALUES (%s, %s, %s)
+    """,
+    (
+        passed_case_id,
+        passed_analyst.strip(),
+        f"Changed case status to {passed_status}.",
+    ),
+)
+    passed_db.conn.commit()
+    return updated_count == 1
 
 
 def recordDisposition(
