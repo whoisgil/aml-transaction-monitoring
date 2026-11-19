@@ -2,6 +2,7 @@
 
 # importing needed libraries
 import streamlit as st
+import os
 
 from classes.db_connect import DB_Connect
 from functions.case_functions import (
@@ -12,10 +13,11 @@ from functions.investigation_functions import (
     fetchCaseNotes, fetchCaseQueue, fetchCaseTransactions
 )
 
-# setting the database credentials used by the interface
-db_username = "root"
-db_password = ""
-db_name = "sar_project"
+# Database credentials come from the environment so no password lives in the code.
+# Set them before running, e.g. export DB_PASSWORD='your-local-mysql-password'
+db_username = os.environ.get("DB_USERNAME", "root")
+db_password = os.environ.get("DB_PASSWORD")
+db_name = os.environ.get("DB_NAME", "sar_project")
 
 
 def renderQueue(passed_db):
@@ -97,6 +99,7 @@ def renderCaseDetail(passed_db, passed_case_id):
 
     renderCaseActions(passed_db, case)
 
+
 def renderCaseActions(passed_db, passed_case):
     """Shows note, status, and disposition controls for an active case."""
 
@@ -144,7 +147,7 @@ def renderCaseActions(passed_db, passed_case):
                 if note_added:
                     st.rerun()
 
-                st.error("This case is closed and cannot receive notes.")
+                st.error("This case was closed and cannot receive notes.")
 
     # A disposition cannot be changed later, so the analyst confirms it explicitly.
     with st.form("disposition_form"):
@@ -175,6 +178,10 @@ def main():
 
     st.set_page_config(page_title="SAR Case Review", layout="wide")
     st.title("SAR Case Review")
+
+    if not db_password:
+        st.error("Set the DB_PASSWORD environment variable before running.")
+        st.stop()
 
     # A new connection on every rerun keeps the page from showing a stale snapshot.
     sar_db = DB_Connect(db_username, db_password, db_name)

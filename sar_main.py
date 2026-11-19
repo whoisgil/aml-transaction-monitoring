@@ -1,19 +1,25 @@
 # main program for the SAR transaction-monitoring project
 
 # importing needed libraries
+import os
+
 from classes.db_connect import DB_Connect
 from functions.load_functions import loadSampleTransactions
 
-# setting the database credentials and file locations used by this script
-db_username = "root"
-db_password = ""
-db_name = "sar_project"
+# Database credentials come from the environment so no password lives in the code.
+# Set them before running, e.g. export DB_PASSWORD='your-local-mysql-password'
+db_username = os.environ.get("DB_USERNAME", "root")
+db_password = os.environ.get("DB_PASSWORD")
+db_name = os.environ.get("DB_NAME", "sar_project")
 csv_path = "text_files/paysim.csv"
 sample_size = 5000
 
 
 def main():
     """Connects to the database and loads a sample of transactions from the CSV"""
+
+    if not db_password:
+        raise SystemExit("Set the DB_PASSWORD environment variable before running.")
 
     sar_db = DB_Connect(db_username, db_password, db_name)
 
